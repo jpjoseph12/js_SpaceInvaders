@@ -2,23 +2,30 @@ var INADERS_ROWS = 3;
 var INVADERS_COLUMNS = 6;
 var X_AXIS = 0;
 var Y_AXIS = 0;
+var SPEED = 500;
+var PLAYER_X = 347.5;
 var MOVE_TO_RIGHT = true;
+var INVADERS_INTERVAL = null;
 
-var canvas = document.getElementById('invadersSpawn');
-var invader = document.createElement("img");
-
+var invadersSpawn = document.getElementById('invadersSpawn');
+var invader = document.createElement('img');
 invader.src = './img/invader.png';
 invader.className = 'invader';
 
-console.log(canvas.getBoundingClientRect())
+var playersSpawn = document.getElementById('playersSpawn');
+var player = document.createElement('img');
+player.src = './img/ship.png';
+player.id = 'player';
+
+// console.log(invadersSpawn.getBoundingClientRect())
 
 var reset = function() {
     X_AXIS = 0;
     Y_AXIS = 0;
     MOVE_TO_RIGHT = true;
-    canvas.style.marginLeft = 0;
-    canvas.style.marginTop = 0;
-    window.clearInterval(invaders);
+    invadersSpawn.style.marginLeft = 0;
+    invadersSpawn.style.marginTop = 0;
+    window.clearInterval(INVADERS_INTERVAL);
     moveInvaders();
     console.log('Restart');
 }
@@ -26,50 +33,84 @@ var reset = function() {
 var spawnInvaders = function () {
 
     for (var i = 0; i < INADERS_ROWS; i++) {
-        if (i > 0) canvas.appendChild(document.createElement("br").cloneNode(true));
+        if (i > 0) invadersSpawn.appendChild(document.createElement("br").cloneNode(true));
 
         for (var j = 0; j < INVADERS_COLUMNS; j++) {
             invader.id = "row" + i + "col" + j;
-            canvas.appendChild(invader.cloneNode(true));
+            invadersSpawn.appendChild(invader.cloneNode(true));
         }
     }
+
+    moveInvaders();
 }
 
-var invaders = setInterval(function () {
+var moveInvaders = function () {
+    INVADERS_INTERVAL = setInterval(function () {
         if (MOVE_TO_RIGHT == true) {
             X_AXIS = X_AXIS + 10;
-            canvas.style.marginLeft = X_AXIS;
-            if (canvas.style.marginLeft === '380px') {
+            invadersSpawn.style.marginLeft = X_AXIS;
+            if (invadersSpawn.style.marginLeft === '380px') {
                 MOVE_TO_RIGHT = false;
                 Y_AXIS = Y_AXIS + 50;
-                canvas.style.marginTop = Y_AXIS;
+                invadersSpawn.style.marginTop = Y_AXIS;
             } 
-            else if (canvas.style.marginTop === '600px') {
+            else if (invadersSpawn.style.marginTop === '600px') {
                 reset()
             }
 
         } else if (MOVE_TO_RIGHT == false) {
             X_AXIS = X_AXIS - 10;
-            canvas.style.marginLeft = X_AXIS;
+            invadersSpawn.style.marginLeft = X_AXIS;
 
-            if (canvas.style.marginLeft === '0px') {
+            if (invadersSpawn.style.marginLeft === '0px') {
                 MOVE_TO_RIGHT = true;
                 Y_AXIS = Y_AXIS + 50;
-                canvas.style.marginTop = Y_AXIS;
+                invadersSpawn.style.marginTop = Y_AXIS;
             } 
-            else if (canvas.style.marginTop === '600px') {
+            else if (invadersSpawn.style.marginTop === '600px') {
                 reset();
             }
         }
 
-    }, 500);
+    }, SPEED)
+}
 
-var moveInvaders = function () {
-    invaders;
+var spawnPlayer = function () {
+    playersSpawn.appendChild(player);
+
+    movePlayer();
 };
 
+var movePlayer = function () {
+    player = document.getElementById('player');
+    window.addEventListener('keydown', function(event){
+        switch(event.code) {
+            case "ArrowLeft":
+                PLAYER_X = PLAYER_X - 10;
+                player.style.left = PLAYER_X;
+                console.log(PLAYER_X);
+                if (PLAYER_X < 10) PLAYER_X = 10;
+                break;
+            case "ArrowRight":
+                PLAYER_X = PLAYER_X + 10;
+                player.style.left = PLAYER_X;
+                console.log(PLAYER_X);
+                if (PLAYER_X > 680) PLAYER_X = 680;
+                break;
+            case "Space":
+                playerShoot();
+                break;
+        }
+    })
+};
 
+var playerShoot = function () {
+    
+}
 window.onload = function () {
+    // Spawning all invaders
     spawnInvaders();
-    moveInvaders();
+    spawnPlayer();
+    
+
 }

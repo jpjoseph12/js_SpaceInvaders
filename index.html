@@ -16,11 +16,11 @@
 
         #game-canvas {
             position: absolute;
-            left: calc((100vw - 70%) / 2);
+            left: calc((100vw - 760px) / 2);
             top: calc((100vh - 70%)/2);
             background-color: #F6F4FF;
             color: #fff;
-            width: 70%;
+            width: 760px;
             height: 70%;
         }
 
@@ -30,12 +30,17 @@
             margin-left: 25px;
             margin-top: 15px;
         }
+        #player {
+            width: 65px;
+            height: 70px;
+            position: absolute;
+            left: calc((100% - 65px) / 2);
+            top: calc((100% - 70px));
+        }
     </style>
     <div id="game-canvas">
-        <span id="jsInvaders">
             <div id="invadersSpawn"> </div>
-            <div id="player"> </iv>
-        </span>
+            <div id="playersSpawn"> </div>
 
 
     </div>
