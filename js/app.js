@@ -3,9 +3,11 @@ var INVADERS_COLUMNS = 6;
 var X_AXIS = 0;
 var Y_AXIS = 0;
 var SPEED = 500;
+var BEAM_Y = null;
 var PLAYER_X = 347.5;
 var MOVE_TO_RIGHT = true;
 var INVADERS_INTERVAL = null;
+var BEAM_INTERVAL = null;
 
 var invadersSpawn = document.getElementById('invadersSpawn');
 var invader = document.createElement('img');
@@ -16,6 +18,10 @@ var playersSpawn = document.getElementById('playersSpawn');
 var player = document.createElement('img');
 player.src = './img/ship.png';
 player.id = 'player';
+
+var beam = document.createElement('img');
+beam.src = './img/beam.png';
+beam.id = 'beam';
 
 // console.log(invadersSpawn.getBoundingClientRect())
 
@@ -104,9 +110,26 @@ var movePlayer = function () {
     })
 };
 
-var playerShoot = function () {
+var playerShoot = function() {
+    playersSpawn.appendChild(beam);
+    beam = document.getElementById('beam');
+    BEAM_Y = beam.getBoundingClientRect().top;
+    BEAM_INTERVAL = setInterval( function (){
+        console.log(BEAM_Y);
+        document.getElementById('beam').style.top = BEAM_Y - 187;
+        BEAM_Y -= 30;
+        if (BEAM_Y === 138.25) {
+            window.clearInterval(BEAM_INTERVAL);
+            var BEAM_INTERVAL = null;
+            document.getElementById('beam').style.top = 0;
+            BEAM_Y = null;
+            playersSpawn.removeChild(beam);
+        } 
+
+    }, 250);    
+};
+
     
-}
 window.onload = function () {
     // Spawning all invaders
     spawnInvaders();
